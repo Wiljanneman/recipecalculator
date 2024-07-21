@@ -5,4 +5,5 @@ export interface Recipe {
     name: string;
     ingredients: Ingredients;
     feeds: number;
+    feedsPerIngredient?: number;
 }

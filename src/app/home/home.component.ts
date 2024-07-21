@@ -53,16 +53,18 @@ export class HomeComponent {
 
     let activeRecipes = this.recipes.filter(x => x.active);
 
-    // Calculate feeds per ingredient for each recipe
+    // Calculate feeds per ingredient ratio for each recipe to determine the 'feed economy' of each recipe
     activeRecipes.forEach(recipe => {
       const totalIngredients = Object.values(recipe.ingredients).reduce((a, b) => a + b, 0);
-      (recipe as any)['feedsPerIngredient'] = recipe.feeds / totalIngredients;
+      recipe.feedsPerIngredient = recipe.feeds / totalIngredients;
     });
 
     // Sort recipes by feeds per ingredient ratio in descending order
-    activeRecipes.sort((a, b) => (b as any)['feedsPerIngredient'] - (a as any)['feedsPerIngredient']);
+    activeRecipes.sort((a, b) => <number>b.feedsPerIngredient - <number>a.feedsPerIngredient);
+
 
     activeRecipes.forEach(recipe => {
+      // calculates the maximum possible count for each recipe that can be made with the available ingredients
       const recipeCount = this.calculateMaxCount(recipe.ingredients);
       if (recipeCount > 0) {
         combinations.push({
@@ -80,20 +82,20 @@ export class HomeComponent {
   }
 
   calculateMaxCount(ingredients: any): number {
+    // calculates amount of available ingredients available for each recipe ingredient after which a min is used to get count of the limiting ingredient.
     return Math.min(
       ...Object.keys(ingredients).map(key =>
-        Math.floor((this.availableIngredients as any)[key] / ingredients[key])
+        Math.floor(this.availableIngredients[key] / ingredients[key])
       )
     );
   }
 
   updateIngredients(recipeName: string, count: number) {
+    // updates count of existing ingredients.
     const recipe = this.recipes.find(r => r.name === recipeName);
     if (recipe) {
       Object.keys(recipe.ingredients).forEach(ingredient => {
-        // let countIngredients = this.availableIngredients[ingredient];
         this.availableIngredients[ingredient] -= (recipe.ingredients as any)[ingredient] * count;
-        // this.ingredientsForm.get(ingredient)?.patchValue(countIngredients);
       });
     }
   }
