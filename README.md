@@ -16,4 +16,4 @@ To get started with Recipe Optimizer, follow these steps:
 **Clone the repository**:
    ```bash
    git clone https://github.com/Wiljanneman/recipecalculator.git
-   cd recipe-optimizer
+
