@@ -1,0 +1,88 @@
+<div class="flex justify-center h-full bg-gray-50 p-4">
+  <div
+    class="lg:w-2/3 md:w-full sm:w-full block p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
+
+    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Recipe Calculator</h5>
+    <form [formGroup]="ingredientsForm" (ngSubmit)="onSubmit()">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div *ngFor="let ingredient of ingredientControls" class="mb-4">
+          <label [for]="ingredient" class="block text-sm font-medium text-gray-700">
+            {{ ingredient | titlecase }}
+          </label>
+          <input type="number" id="{{ ingredient }}" formControlName="{{ ingredient }}" min="0"
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+          <div
+            *ngIf="ingredientsForm.get(ingredient)?.invalid && (ingredientsForm.get(ingredient)?.dirty || ingredientsForm.get(ingredient)?.touched)">
+            <span *ngIf="ingredientsForm.get(ingredient)?.errors?.required" class="text-red-600 text-sm">This field is
+              required.</span>
+            <span *ngIf="ingredientsForm.get(ingredient)?.errors?.min" class="text-red-600 text-sm">Value must be at
+              least
+              0.</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <button [disabled]="ingredientsForm.invalid" type="submit"
+          class="text-white bg-blue-700 disabled:bg-red-800 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Calculate</button>
+      </div>
+    </form>
+    <div
+      class="xl:w-1/3 md:w-2/3 flex p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400"
+      role="alert">
+      <svg class="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor" viewBox="0 0 20 20">
+        <path
+          d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+      </svg>
+      <span class="sr-only">Info</span>
+      <div *ngIf="!totalPeopleFed">
+        Calculate to get started
+      </div>
+      <div *ngIf="totalPeopleFed">
+        <span class="font-medium">{{totalPeopleFed}} people can be fed:</span>
+        <div *ngFor="let recipe of optimalCombination">
+          <div class="grid grid-cols-4 md:grid-cols-4 lg:grid-cols-4 lg:gap-4 md:gap-2 gap-1">
+            <div class="text-ellipsis overflow-hidden"><span>{{recipe?.name}}</span></div>
+            <div class="text-ellipsis overflow-hidden"><span>{{recipe?.count}}</span> unit(s)</div>
+            <div class="text-ellipsis overflow-hidden"><span>feeds</span> {{recipe?.feeds}}</div>
+            <div class="text-ellipsis overflow-hidden"><span>total</span> {{recipe?.totalFeeds}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="flex justify-center h-full bg-gray-50 ">
+  <div class="lg:w-2/3 md:w-full sm:w-full p-4 grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-2 lg:gap-4">
+    <div *ngFor="let item of recipes"
+      class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+      <div class="flex items-center justify-between mb-4">
+        <p class="leading-none text-gray-900 dark:text-white">
+          {{ item.name }}
+        </p>
+        <a (click)="toggleRecipe(item)" [ngClass]="{'text-green-600': item.active, 'text-red-600': !item.active  }"
+          class="cursor-pointer text-sm font-medium  hover:underline dark:text-blue-500">
+          {{ item.active ? 'Disable' : 'Enable'}}
+        </a>
+      </div>
+      <hr>
+      <div class="flex flex-row flex-wrap mt-2">
+        <span *ngFor="let ingredient of Object.keys(item.ingredients)"
+          class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300 mb-2">
+          <span class="inline-flex ">
+            {{ ingredient }}
+            <span class="flex justify-center w-4 h-4 ms-2 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">
+              {{ item.ingredients[ingredient] }}
+            </span>
+          </span>
+
+
+          <!-- <p></p> -->
+
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+</div>
