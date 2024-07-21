@@ -9,9 +9,6 @@ Recipe Optimizer is an application that helps you determine the optimal combinat
 - **Optimal Recipe Combination**: Determines the optimal combination of recipes to maximize the number of people fed.
 - **Dynamic Ingredient Updates**: Adjusts available ingredients based on selected recipes and their counts.
 
-## Installation
-
-To get started with Recipe Optimizer, follow these steps:
 
 **Clone the repository**:
    ```bash
