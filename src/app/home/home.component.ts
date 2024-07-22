@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Recipe } from '../shared/models/recipe.model';
+import { Ingredients } from '../shared/models/ingredient.model';
 
 @Component({
   selector: 'app-home',
@@ -40,7 +41,9 @@ export class HomeComponent {
       this.calculateOptimalCombination();
     }
   }
+
   availableIngredients: any;
+
   get ingredientControls() {
     return Object.keys(this.ingredientsForm.controls);
   }
@@ -81,7 +84,7 @@ export class HomeComponent {
     this.totalPeopleFed = combinations.reduce((acc, combo) => acc + combo.totalFeeds, 0);
   }
 
-  calculateMaxCount(ingredients: any): number {
+  calculateMaxCount(ingredients: Ingredients): number {
     // calculates amount of available ingredients available for each recipe ingredient after which a min is used to get count of the limiting ingredient.
     return Math.min(
       ...Object.keys(ingredients).map(key =>
